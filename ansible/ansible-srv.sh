@@ -35,7 +35,8 @@ Usage:
     --remove
       Remove service
 
-    Service name: script works only with ansible and services.
+    --echo
+      Echo mode without execution
 EOF
 }
 
@@ -51,6 +52,7 @@ if [ $# -eq 0 ]; then
 fi
 
 cmnd="no"
+echo="no"
 while test $# -gt 0
 do
     case $1 in
@@ -69,6 +71,10 @@ do
     -version | -versio | -versi | -vers | -ver | -ve | -v )
         version
         exit 0
+        ;;
+    --echo | --ech | --ec | --e | \
+    -echo | -ech | -ec | -e )
+        echo="yes"
         ;;
     -*)
         error "Unrecognized option: $1."
@@ -90,11 +96,19 @@ fi
 
 srv_nm="ansible"
 
+if [ $echo == 'yes' ]; then
+  service_worker $srv_nm $cmnd | \
+    while read operation; do
+      echo $operation
+    done
+elif [ $echo == "no" ]; then
+  echo 'no'
+fi
 # Echo all commands for testing. Use sh for execute script.
-service_worker $srv_nm $cmnd | \
-while read operation; do
-    echo $operation
-done
+#service_worker $srv_nm $cmnd | \
+#while read operation; do
+#    echo $operation
+#done
 #done | sh
 
 exit 0
