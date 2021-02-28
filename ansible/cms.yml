@@ -1,0 +1,8 @@
+---
+# file: ansible-cnfg-install.yml
+
+- name: Install ansible configuration
+  hosts: cms
+
+  roles:
+    - ansible

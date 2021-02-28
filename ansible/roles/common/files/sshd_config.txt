@@ -1,0 +1,113 @@
+Port 22
+# Set to inet for IPv4-only or inet6 for IPv6-only
+AddressFamily inet
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+# Allows only the named users and groups to log in
+# Somewhat draconian. Adding/removing users requires reload
+AllowUsers ansible olegdeb
+#AllowGroups admins
+
+# Display a message before users authenticate
+# Important for inane legal reasons and compliance requirements
+#Banner /etc/ssh_banner
+
+# We prefer to allow public key authentication only
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+PermitEmptyPasswords no
+RSAAuthentication no
+GSSAPIAuthentication no
+HostbasedAuthentication no
+PubkeyAuthentication yes
+
+# SECURITY
+# Password AND publickey authentication
+# PasswordAuthentication and PubkeyAuthentication must be enabled
+#AuthenticationMethods publickey,password
+
+# Cypher method
+Ciphers chacha20-poly1305@openssh.com
+#Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+# Supported HostKey algorithms by order of preference.
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+
+# Specifies the host key algorithms that the server offers.
+HostKeyAlgorithms ssh-ed25519,ssh-rsa,ssh-dss,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521
+
+# Specifies the available KEX (Key Exchange) algorithms.
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+
+# Specifies the available MAC (message authentication code) algorithms.
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+
+# Deprecated option
+UsePrivilegeSeparation sandbox
+
+# SECURITY end
+
+# Disconnect inactive clients after 5 minutes
+ClientAliveInterval 300
+ClientAliveCountMax 1
+
+# Allow compression at all times
+Compression yes
+
+# Logging
+SyslogFacility AUTH
+
+# Record failed login attempts
+LogLevel VERBOSE
+#LogLevel INFO
+
+# Authentication:
+# Do not allow root to log in (encourages use of sudo)
+PermitRootLogin no
+StrictModes yes
+# Reduced from the default of 6
+MaxAuthTries 3
+#MaxSessions 10
+
+# Prevent users from setting their environment in an authorized_keys file
+PermitUserEnvironment no
+
+# Set this to 'yes' to enable PAM authentication, account processing,
+# and session processing. If this is enabled, PAM authentication will
+# be allowed through the ChallengeResponseAuthentication and
+# PasswordAuthentication.  Depending on your PAM configuration,
+# PAM authentication via ChallengeResponseAuthentication may bypass
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+UsePAM yes
+
+# Kill the session if a TCP connection is lost
+TCPKeepAlive no
+
+# TCP forwarding is convenient but can be abused
+AllowTcpForwarding yes
+# Do not allow remote hosts to use forwarded ports
+GatewayPorts no
+# Do not allow X forwarding if your site does not use X
+X11Forwarding no
+PermitTunnel no
+PrintMotd yes
+#PrintMotd no
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+# override default of no subsystems
+Subsystem       sftp    /usr/lib/openssh/sftp-server
+
+#Match Address 10.25.50.?
+#    PasswordAuthentication yes
+#    PermitRootLogin yes
+
+Match User olegdeb
+    PasswordAuthentication yes

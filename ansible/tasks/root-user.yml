@@ -1,0 +1,15 @@
+---
+# file: tasks/root-user.yml
+
+# root
+- name: Generate root user password
+  shell: "{{ generate_password_command }}"
+  register: root_passwd_reg
+  no_log: true
+
+- name: Update root user password
+  user:
+    name: 'root'
+    password: "{{ root_passwd_reg.stdout | password_hash('sha512') }}"
+    update_password: 'always'
+  no_log: true
