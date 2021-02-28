@@ -97,18 +97,15 @@ fi
 srv_nm="ansible"
 
 if [ $echo == 'yes' ]; then
-  service_worker $srv_nm $cmnd | \
+    service_worker $srv_nm $cmnd | \
     while read operation; do
       echo $operation
     done
 elif [ $echo == "no" ]; then
-  echo 'no'
+    service_worker $srv_nm $cmnd | \
+    while read operation; do
+      echo $operation
+    done | sh
 fi
-# Echo all commands for testing. Use sh for execute script.
-#service_worker $srv_nm $cmnd | \
-#while read operation; do
-#    echo $operation
-#done
-#done | sh
 
 exit 0
