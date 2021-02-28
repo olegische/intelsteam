@@ -11,12 +11,12 @@
       extensions:
         - yml
 
-  - name: Include OS specific variables
-    include_vars:
-      dir: "{{ playbook_dir }}/roles/ansible/vars"
-      files_matching: "{{ ansible_facts['os_family'] }}.yml"
-      extensions:
-        - yml
+#  - name: Include OS specific variables
+#    include_vars:
+#      dir: "{{ playbook_dir }}/roles/ansible/vars"
+#      files_matching: "{{ ansible_facts['os_family'] }}.yml"
+#      extensions:
+#        - yml
 
   - name: Remove vault id dir
     file:
