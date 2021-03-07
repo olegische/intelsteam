@@ -15,7 +15,7 @@ export_vars()
     echo "echo 'Enter network interface name you want to rename: '"
     read myIface
     local sysIface=$(ip a | grep -Eo 'enp[0-9a-z]?*')
-    echo $sysIface
+    echo "echo $sysIface"
     if [ $myIface != $sysIface ]; then
         echo "Can't find interface ${myIface}. Exit script."
         exit 1
