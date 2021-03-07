@@ -4,6 +4,11 @@
 packages_common:
   - sudo
   - openssl
+  - rsync
+  - ntp
+  - ntpdate
+  - nfs-common
+  - vim
 
 sudoers_file_path: /etc/sudoers
 sudoers_dir_path: /etc/sudoers.d
