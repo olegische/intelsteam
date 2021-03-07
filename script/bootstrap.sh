@@ -6,27 +6,33 @@
 set -e
 
 cd "$(dirname "$0")/.."
+source script/vars.sh
 
 export_vars()
 {
-    local myIface=''
-    local myNewIface=''
+    local sysIface='0'
+    local myIface='0'
+    local myNewIface='0'
     local myIfaceNum='10'
     echo "echo 'Enter network interface name you want to rename: '"
     read myIface
-    local sysIface=$(ip a | grep -Eo 'enp[0-9a-z]?*')
-    echo "echo $sysIface"
-    if [ $myIface != $sysIface ]; then
+    for iface in $(ip a | grep BROADCAST | cut -d':' -f2 | sed 's/\ //')
+    do
+        if [ $iface == $myIface ]; then
+            sysIface=$iface
+        fi
+    done
+    if [ $sysIface == '0' ]; then
         echo "Can't find interface ${myIface}. Exit script."
         exit 1
     fi
     echo "echo 'Enter new network interface name: '"
     read myNewIface
 
-    echo "cat <<EOF >/tmp/bootstrap-vars
-        MYIFNAME=$sysIface
-        MYNEWIFNAME=$myNewIface
-        MYNUM=$myIfaceNum
+    echo "cat <<EOF >${NETCONFIG_VARS}
+        netConfigIface=$sysIface
+        netConfigIfaceNew=$myNewIface
+        netConfigNum=$myIfaceNum
     EOF"
 }
 

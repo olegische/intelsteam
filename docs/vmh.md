@@ -23,3 +23,6 @@ sudo chmod +x intelsteam/script/ansible/ansible-srv.sh ;\
 sudo intelsteam/script/setup.sh
 sudo intelsteam/script/ansible/ansible-srv.sh --install
 ```
+
+# Comments
+- Проверить файлы /etc/systemd/network/?.link на машине, с которой будут сниматься сетевые интерфейсы, чтобы запомнить соответствие мак адресов и имен интерфейсов sn и bnc
